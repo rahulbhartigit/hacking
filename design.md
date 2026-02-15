@@ -1,5 +1,3 @@
-
-
 # Overview
 
 YouTube Growth Intelligence is an infrastructure-level AI system that provides YouTube creators with data-driven content optimization recommendations. The system follows a three-tier architecture:
@@ -134,16 +132,19 @@ sequenceDiagram
 ```typescript
 interface AuthService {
   // User authentication
-  register(email: string, password: string): Promise<User>
-  login(email: string, password: string): Promise<{ user: User, token: string }>
-  verifyToken(token: string): Promise<User>
-  resetPassword(email: string): Promise<void>
-  
+  register(email: string, password: string): Promise<User>;
+  login(
+    email: string,
+    password: string,
+  ): Promise<{ user: User; token: string }>;
+  verifyToken(token: string): Promise<User>;
+  resetPassword(email: string): Promise<void>;
+
   // YouTube OAuth
-  initiateYouTubeOAuth(): string  // Returns OAuth URL
-  handleOAuthCallback(code: string, userId: string): Promise<Channel>
-  refreshAccessToken(channelId: string): Promise<void>
-  revokeAccess(channelId: string): Promise<void>
+  initiateYouTubeOAuth(): string; // Returns OAuth URL
+  handleOAuthCallback(code: string, userId: string): Promise<Channel>;
+  refreshAccessToken(channelId: string): Promise<void>;
+  revokeAccess(channelId: string): Promise<void>;
 }
 ```
 
@@ -152,19 +153,33 @@ interface AuthService {
 ```typescript
 interface AnalyticsService {
   // Data ingestion
-  syncChannelData(channelId: string): Promise<SyncResult>
-  fetchVideoMetrics(channelId: string, videoIds: string[]): Promise<VideoMetrics[]>
-  fetchRetentionCurve(videoId: string): Promise<RetentionData>
-  fetchTrafficSources(videoId: string): Promise<TrafficSource[]>
-  
+  syncChannelData(channelId: string): Promise<SyncResult>;
+  fetchVideoMetrics(
+    channelId: string,
+    videoIds: string[],
+  ): Promise<VideoMetrics[]>;
+  fetchRetentionCurve(videoId: string): Promise<RetentionData>;
+  fetchTrafficSources(videoId: string): Promise<TrafficSource[]>;
+
   // Data retrieval
-  getChannelMetrics(channelId: string, period: DateRange): Promise<ChannelMetrics>
-  getTopVideos(channelId: string, metric: 'views' | 'ctr' | 'avd', limit: number): Promise<Video[]>
-  getRetentionAnalysis(videoId: string): Promise<RetentionAnalysis>
-  
+  getChannelMetrics(
+    channelId: string,
+    period: DateRange,
+  ): Promise<ChannelMetrics>;
+  getTopVideos(
+    channelId: string,
+    metric: "views" | "ctr" | "avd",
+    limit: number,
+  ): Promise<Video[]>;
+  getRetentionAnalysis(videoId: string): Promise<RetentionAnalysis>;
+
   // Caching
-  getCachedMetrics(channelId: string): Promise<ChannelMetrics | null>
-  setCachedMetrics(channelId: string, metrics: ChannelMetrics, ttl: number): Promise<void>
+  getCachedMetrics(channelId: string): Promise<ChannelMetrics | null>;
+  setCachedMetrics(
+    channelId: string,
+    metrics: ChannelMetrics,
+    ttl: number,
+  ): Promise<void>;
 }
 ```
 
@@ -173,19 +188,27 @@ interface AnalyticsService {
 ```typescript
 interface AIService {
   // Content generation
-  generateVideoIdeas(channelId: string, count: number): Promise<VideoIdea[]>
-  generateThumbnailConcepts(videoContext: VideoContext): Promise<ThumbnailConcept[]>
-  optimizeTitle(originalTitle: string, channelContext: ChannelContext): Promise<TitleSuggestion[]>
-  rewriteHook(originalHook: string, retentionData: RetentionData): Promise<HookSuggestion[]>
-  
+  generateVideoIdeas(channelId: string, count: number): Promise<VideoIdea[]>;
+  generateThumbnailConcepts(
+    videoContext: VideoContext,
+  ): Promise<ThumbnailConcept[]>;
+  optimizeTitle(
+    originalTitle: string,
+    channelContext: ChannelContext,
+  ): Promise<TitleSuggestion[]>;
+  rewriteHook(
+    originalHook: string,
+    retentionData: RetentionData,
+  ): Promise<HookSuggestion[]>;
+
   // Analysis
-  analyzeRetention(videoId: string): Promise<RetentionInsights>
-  generateGrowthDiagnostic(channelId: string): Promise<GrowthDiagnostic>
-  
+  analyzeRetention(videoId: string): Promise<RetentionInsights>;
+  generateGrowthDiagnostic(channelId: string): Promise<GrowthDiagnostic>;
+
   // Prompt management
-  buildPrompt(template: PromptTemplate, context: any): string
-  callBedrockAPI(prompt: string, model: string): Promise<string>
-  parseAIResponse(response: string, expectedFormat: string): any
+  buildPrompt(template: PromptTemplate, context: any): string;
+  callBedrockAPI(prompt: string, model: string): Promise<string>;
+  parseAIResponse(response: string, expectedFormat: string): any;
 }
 ```
 
@@ -194,18 +217,18 @@ interface AIService {
 ```typescript
 interface JobService {
   // Job management
-  enqueueJob(type: JobType, payload: any, priority: number): Promise<Job>
-  getJobStatus(jobId: string): Promise<JobStatus>
-  cancelJob(jobId: string): Promise<void>
-  
+  enqueueJob(type: JobType, payload: any, priority: number): Promise<Job>;
+  getJobStatus(jobId: string): Promise<JobStatus>;
+  cancelJob(jobId: string): Promise<void>;
+
   // Job processing
-  processAnalyticsSync(channelId: string): Promise<void>
-  processAIGeneration(request: AIRequest): Promise<Insight>
-  
+  processAnalyticsSync(channelId: string): Promise<void>;
+  processAIGeneration(request: AIRequest): Promise<Insight>;
+
   // Job monitoring
-  getQueueDepth(): Promise<number>
-  getFailedJobs(limit: number): Promise<Job[]>
-  retryFailedJob(jobId: string): Promise<void>
+  getQueueDepth(): Promise<number>;
+  getFailedJobs(limit: number): Promise<Job[]>;
+  retryFailedJob(jobId: string): Promise<void>;
 }
 ```
 
@@ -214,18 +237,24 @@ interface JobService {
 ```typescript
 interface SubscriptionService {
   // Subscription management
-  createSubscription(userId: string, tier: SubscriptionTier): Promise<Subscription>
-  updateSubscription(subscriptionId: string, tier: SubscriptionTier): Promise<Subscription>
-  cancelSubscription(subscriptionId: string): Promise<void>
-  
+  createSubscription(
+    userId: string,
+    tier: SubscriptionTier,
+  ): Promise<Subscription>;
+  updateSubscription(
+    subscriptionId: string,
+    tier: SubscriptionTier,
+  ): Promise<Subscription>;
+  cancelSubscription(subscriptionId: string): Promise<void>;
+
   // Usage tracking
-  checkUsageLimit(userId: string, feature: string): Promise<boolean>
-  incrementUsage(userId: string, feature: string): Promise<void>
-  getUsageStats(userId: string): Promise<UsageStats>
-  
+  checkUsageLimit(userId: string, feature: string): Promise<boolean>;
+  incrementUsage(userId: string, feature: string): Promise<void>;
+  getUsageStats(userId: string): Promise<UsageStats>;
+
   // Stripe integration
-  createStripeCustomer(user: User): Promise<string>
-  handleWebhook(event: StripeEvent): Promise<void>
+  createStripeCustomer(user: User): Promise<string>;
+  handleWebhook(event: StripeEvent): Promise<void>;
 }
 ```
 
@@ -235,14 +264,12 @@ interface SubscriptionService {
 
 #### USER
 
-
 Stores platform user accounts including creators, admins, and API users.
 Handles authentication, authorization, and ownership of related resources.
 
 ---
 
 #### CHANNEL
-
 
 Represents a YouTube channel connected via OAuth.
 Stores channel metadata, token information, and sync status.
@@ -251,14 +278,12 @@ Stores channel metadata, token information, and sync status.
 
 #### VIDEO
 
-
 Stores metadata for YouTube videos belonging to a channel.
 Used for analytics processing and AI-based insights generation.
 
 ---
 
 #### INSIGHT
-
 
 Stores AI-generated recommendations and diagnostics for a channel.
 Includes insight type, structured content, confidence score, and status.
@@ -292,7 +317,6 @@ Supports analytics and growth diagnostics.
 ---
 
 #### RETENTIONDATA
-
 
 Stores timestamp-level audience retention data for videos.
 Used to analyze drop-off points and improve content engagement.
@@ -398,8 +422,6 @@ erDiagram
     }
 
 ```
-
-
 
 ## API Design
 
@@ -655,6 +677,48 @@ For each idea, provide:
 Format as JSON array.
 ```
 
+```mermaid
+flowchart TD
+
+    Start([Input Data Recieved]) --> AnalyzeTop[Analyze Top Performing Videos]
+    Start --> AnalyzeRecent[Analyze Recent Upload Topics]
+
+    subgraph Pattern Recognition
+    AnalyzeTop --> IdentifyHooks{Identify Successful Hooks}
+    IdentifyHooks -->|High AVD| NoteFormat[Note: Deep Dives/Tutorials work]
+    IdentifyHooks -->|High CTR| NoteTopic[Note: Controversial/Comparison topics work]
+    end
+
+    subgraph Gap Analysis
+    AnalyzeRecent --> CheckSaturation{Check Topic Saturation}
+    CheckSaturation -->|Too many similar vids| FindPivot[Strategy: Pivot Angle]
+    CheckSaturation -->|Low AVD on recent| FindFormat[Strategy: Change Pacing]
+    end
+
+    NoteFormat --> Synthesis[Synthesize Ideas]
+    NoteTopic --> Synthesis
+    FindPivot --> Synthesis
+    FindFormat --> Synthesis
+
+    Synthesis --> FilterAudience{Matches Target Audience?}
+    FilterAudience -->|Yes| DraftIdea[Draft Title & Description]
+    FilterAudience -->|No| Discard[Discard Idea]
+
+    DraftIdea --> Score[Calculate Confidence Score]
+
+    Score --> JSON[Format as JSON Array]
+    JSON --> End([Final Output])
+
+    %% Styling with Neutral Colors (Light Gray) for Start/End
+    style Start fill:#e0e0e0,stroke:#333,stroke-width:2px,color:#000
+    style End fill:#e0e0e0,stroke:#333,stroke-width:2px,color:#000
+
+    %% Keeping JSON node highlighted for contrast
+    style JSON fill:#bbf,stroke:#333,stroke-width:2px
+```
+
+---
+
 **Title Optimization Template**
 
 ```
@@ -693,29 +757,29 @@ Format as JSON array.
 
 ```typescript
 async function callBedrock(prompt: string): Promise<string> {
-  const client = new BedrockRuntimeClient({ region: 'us-east-1' });
-  
+  const client = new BedrockRuntimeClient({ region: "us-east-1" });
+
   const request = {
-    modelId: 'anthropic.claude-3-sonnet-20240229-v1:0',
-    contentType: 'application/json',
-    accept: 'application/json',
+    modelId: "anthropic.claude-3-sonnet-20240229-v1:0",
+    contentType: "application/json",
+    accept: "application/json",
     body: JSON.stringify({
-      anthropic_version: 'bedrock-2023-05-31',
+      anthropic_version: "bedrock-2023-05-31",
       max_tokens: 2000,
       temperature: 0.7,
       messages: [
         {
-          role: 'user',
-          content: prompt
-        }
-      ]
-    })
+          role: "user",
+          content: prompt,
+        },
+      ],
+    }),
   };
-  
+
   const command = new InvokeModelCommand(request);
   const response = await client.send(command);
   const responseBody = JSON.parse(new TextDecoder().decode(response.body));
-  
+
   return responseBody.content[0].text;
 }
 ```
@@ -750,33 +814,37 @@ async function callBedrock(prompt: string): Promise<string> {
 **Job Configuration**:
 
 ```typescript
-const analyticsQueue = new Bull('analytics', {
+const analyticsQueue = new Bull("analytics", {
   redis: {
     host: process.env.REDIS_HOST,
-    port: 6379
+    port: 6379,
   },
   defaultJobOptions: {
     attempts: 3,
     backoff: {
-      type: 'exponential',
-      delay: 2000
+      type: "exponential",
+      delay: 2000,
     },
     removeOnComplete: 100,
-    removeOnFail: 500
-  }
+    removeOnFail: 500,
+  },
 });
 
 // Add job
-await analyticsQueue.add('sync', {
-  channelId: 'uuid',
-  syncType: 'full'
-}, {
-  priority: 5,
-  delay: 0
-});
+await analyticsQueue.add(
+  "sync",
+  {
+    channelId: "uuid",
+    syncType: "full",
+  },
+  {
+    priority: 5,
+    delay: 0,
+  },
+);
 
 // Process job
-analyticsQueue.process('sync', async (job) => {
+analyticsQueue.process("sync", async (job) => {
   const { channelId, syncType } = job.data;
   await analyticsService.syncChannelData(channelId);
 });
@@ -787,15 +855,15 @@ analyticsQueue.process('sync', async (job) => {
 **Daily Analytics Sync** (2:00 AM UTC)
 
 ```typescript
-cron.schedule('0 2 * * *', async () => {
+cron.schedule("0 2 * * *", async () => {
   const activeChannels = await prisma.channel.findMany({
-    where: { syncStatus: 'active' }
+    where: { syncStatus: "active" },
   });
-  
+
   for (const channel of activeChannels) {
-    await analyticsQueue.add('sync', {
+    await analyticsQueue.add("sync", {
       channelId: channel.id,
-      syncType: 'incremental'
+      syncType: "incremental",
     });
   }
 });
@@ -804,15 +872,15 @@ cron.schedule('0 2 * * *', async () => {
 **Token Refresh Check** (Every 6 hours)
 
 ```typescript
-cron.schedule('0 */6 * * *', async () => {
+cron.schedule("0 */6 * * *", async () => {
   const expiringTokens = await prisma.channel.findMany({
     where: {
       tokenExpiresAt: {
-        lt: new Date(Date.now() + 24 * 60 * 60 * 1000) // Expires in 24h
-      }
-    }
+        lt: new Date(Date.now() + 24 * 60 * 60 * 1000), // Expires in 24h
+      },
+    },
   });
-  
+
   for (const channel of expiringTokens) {
     await authService.refreshAccessToken(channel.id);
   }
@@ -822,9 +890,9 @@ cron.schedule('0 */6 * * *', async () => {
 **Monthly Usage Reset** (1st of month, 00:00 UTC)
 
 ```typescript
-cron.schedule('0 0 1 * *', async () => {
+cron.schedule("0 0 1 * *", async () => {
   await prisma.usageTracking.updateMany({
-    data: { count: 0 }
+    data: { count: 0 },
   });
 });
 ```
@@ -840,7 +908,7 @@ cron.schedule('0 0 1 * *', async () => {
 **Implementation using express-rate-limit**:
 
 ```typescript
-import rateLimit from 'express-rate-limit';
+import rateLimit from "express-rate-limit";
 
 const apiLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
@@ -849,13 +917,13 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
   handler: (req, res) => {
     res.status(429).json({
-      error: 'Too many requests',
-      retryAfter: 60
+      error: "Too many requests",
+      retryAfter: 60,
     });
-  }
+  },
 });
 
-app.use('/api/', apiLimiter);
+app.use("/api/", apiLimiter);
 ```
 
 ### Input Validation
@@ -863,19 +931,19 @@ app.use('/api/', apiLimiter);
 **Using Zod for request validation**:
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
 const videoIdeaRequestSchema = z.object({
   channelId: z.string().uuid(),
-  count: z.number().min(1).max(10)
+  count: z.number().min(1).max(10),
 });
 
-app.post('/api/insights/video-ideas', async (req, res) => {
+app.post("/api/insights/video-ideas", async (req, res) => {
   try {
     const validated = videoIdeaRequestSchema.parse(req.body);
     // Process request
   } catch (error) {
-    res.status(400).json({ error: 'Invalid request data' });
+    res.status(400).json({ error: "Invalid request data" });
   }
 });
 ```
@@ -909,16 +977,15 @@ app.post('/api/insights/video-ideas', async (req, res) => {
 **Multi-Layer Caching**:
 
 1. **Application Cache (Redis)**:
-   
    - Channel metrics: 1 hour TTL
    - Top videos: 6 hours TTL
    - User session data: 7 days TTL
+
 2. **Database Query Cache**:
-   
    - Frequently accessed analytics data
    - Invalidate on new data sync
+
 3. **CDN Cache (CloudFront)**:
-   
    - Static assets (JS, CSS, images)
    - API responses for public endpoints (5 minutes TTL)
 
@@ -983,18 +1050,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Run tests
         run: npm test
-      
+
       - name: Build Docker image
         run: docker build -t youtube-growth-api .
-      
+
       - name: Push to ECR
         run: |
           aws ecr get-login-password | docker login --username AWS --password-stdin
           docker push youtube-growth-api:latest
-      
+
       - name: Deploy to EC2
         run: |
           aws ecs update-service --cluster prod --service api --force-new-deployment
@@ -1030,34 +1097,34 @@ jobs:
 **Structured Logging with Winston**:
 
 ```typescript
-import winston from 'winston';
+import winston from "winston";
 
 const logger = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.File({ filename: "error.log", level: "error" }),
+    new winston.transports.File({ filename: "combined.log" }),
     new winston.transports.Console({
-      format: winston.format.simple()
-    })
-  ]
+      format: winston.format.simple(),
+    }),
+  ],
 });
 
 // Usage
-logger.info('Analytics sync started', {
-  channelId: 'uuid',
-  syncType: 'full',
-  timestamp: new Date()
+logger.info("Analytics sync started", {
+  channelId: "uuid",
+  syncType: "full",
+  timestamp: new Date(),
 });
 
-logger.error('YouTube API error', {
+logger.error("YouTube API error", {
   error: error.message,
-  channelId: 'uuid',
-  endpoint: '/youtube/v3/analytics'
+  channelId: "uuid",
+  endpoint: "/youtube/v3/analytics",
 });
 ```
 
@@ -1081,20 +1148,20 @@ logger.error('YouTube API error', {
 **Health Check Endpoint**:
 
 ```typescript
-app.get('/health', async (req, res) => {
+app.get("/health", async (req, res) => {
   const checks = {
     database: await checkDatabase(),
     redis: await checkRedis(),
     youtube: await checkYouTubeAPI(),
-    bedrock: await checkBedrock()
+    bedrock: await checkBedrock(),
   };
-  
-  const healthy = Object.values(checks).every(check => check.status === 'ok');
-  
+
+  const healthy = Object.values(checks).every((check) => check.status === "ok");
+
   res.status(healthy ? 200 : 503).json({
-    status: healthy ? 'healthy' : 'unhealthy',
+    status: healthy ? "healthy" : "unhealthy",
     checks,
-    timestamp: new Date()
+    timestamp: new Date(),
   });
 });
 ```
