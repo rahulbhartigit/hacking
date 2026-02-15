@@ -443,6 +443,4 @@ The platform targets small to mid-size creators (0-100k subscribers) across educ
 - $150k MRR
 - 99.9% uptime
 - <100ms API response time (p95)
-  ```
-  
-  ```
+
